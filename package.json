@@ -1,0 +1,35 @@
+{
+  "name": "rest-api_blog",
+  "version": "1.0.0",
+  "description": "THis is the rest api learning of mern stack",
+  "keywords": [
+    "blog",
+    "api",
+    "restful",
+    "rest",
+    "api"
+  ],
+  "homepage": "https://github.com/Niraj-Bhatta/REST-API-LEARN#readme",
+  "bugs": {
+    "url": "https://github.com/Niraj-Bhatta/REST-API-LEARN/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Niraj-Bhatta/REST-API-LEARN.git"
+  },
+  "license": "ISC",
+  "author": "Niraj Bhatta",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon index.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.3.0",
+    "dotenv": "^18.0.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.11.0",
+    "nodemon": "^3.1.14"
+  }
+}
