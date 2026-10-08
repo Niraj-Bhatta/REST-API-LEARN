@@ -21,6 +21,9 @@ app.use(bodyParser.urlencoded({limit : "500mb",extended :true}));
 
 
 //route selection
-app.use("/api/v1/auth",authRoute)
+app.use("/api/v1/auth",authRoute);
+app.use(express.json());
+
+
 
 module.exports =app;
