@@ -10,12 +10,37 @@ const signup = async (req, res, next) => {
 
     const { name, email, password, role } = req.body;
 
+    if (!name) {
+      res.code=400;
+      throw new Error("You Must Input name");
+    }
+
+    if (!email) {
+      res.code=400;
+      throw new Error("You Must Input email");
+    }
+    if (!password) {
+      res.code=400;
+      throw new Error("You Must Input password");
+    }
+    if(password.length < 5){
+      res.code =400;
+      throw new error("password must be greater than 6 characters")
+    }
+
+    if (!role) {
+      res.code=400;
+      throw new Error("You Must Input role");
+    }
+
     const newUser = new User({
       name,
       email,
       password,
       role,
     });
+
+    
 
     console.log("NEW USER:", newUser);
 
@@ -24,19 +49,19 @@ const signup = async (req, res, next) => {
     console.log("SAVED USER:", savedUser);
 
     const dbName = mongoose.connection.db.databaseName;
-const collections = await mongoose.connection.db
-  .listCollections()
-  .toArray();
+    const collections = await mongoose.connection.db
+      .listCollections()
+      .toArray();
 
-console.log("ACTUAL DB:", dbName);
-console.log(
-  "COLLECTIONS:",
-  collections.map((c) => c.name)
-);
+    console.log("ACTUAL DB:", dbName);
+    console.log(
+      "COLLECTIONS:",
+      collections.map((c) => c.name),
+    );
 
     res.status(201).json({
-      code :201,
-      status :true,
+      code: 201,
+      status: true,
       message: "User registered successfully",
       user: savedUser,
     });
