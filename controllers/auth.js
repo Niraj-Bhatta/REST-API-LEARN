@@ -10,28 +10,12 @@ const signup = async (req, res, next) => {
 
     const { name, email, password, role } = req.body;
 
-    if (!name) {
-      res.code=400;
-      throw new Error("You Must Input name");
+    const isEmailExist =await User.findOne({email});
+    if(isEmailExist){
+      res.code = 400;
+      throw new Error("Email already exists");
     }
 
-    if (!email) {
-      res.code=400;
-      throw new Error("You Must Input email");
-    }
-    if (!password) {
-      res.code=400;
-      throw new Error("You Must Input password");
-    }
-    if(password.length < 5){
-      res.code =400;
-      throw new error("password must be greater than 6 characters")
-    }
-
-    if (!role) {
-      res.code=400;
-      throw new Error("You Must Input role");
-    }
 
     const newUser = new User({
       name,
