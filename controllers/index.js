@@ -1,8 +1,8 @@
-const {signup} =require("./auth");
+const {signup, signin} =require("./auth");
 const {notFound} =require("./notFound");
 
 const authController = {
-    signup
+    signup ,signin
 };
 
 module.exports={authController,notFound};

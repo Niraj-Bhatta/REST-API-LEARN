@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models");
+const hashPassword = require("../utils/hashPass");
+const comparePass = require("../utils/comparePass")
 
 const signup = async (req, res, next) => {
   try {
@@ -16,11 +18,12 @@ const signup = async (req, res, next) => {
       throw new Error("Email already exists");
     }
 
+    const hashedPassword = await hashPassword(password);
 
     const newUser = new User({
       name,
       email,
-      password,
+      password : hashedPassword,
       role,
     });
 
@@ -55,4 +58,25 @@ const signup = async (req, res, next) => {
   }
 };
 
-module.exports = { signup };
+const signin = async(req,res,next) =>{
+  try{
+    const {email,password} = req.body;
+    const user = await User.findOne({email});
+
+    if(!user){
+      res.code = 401;
+      throw new Error("Invalid credentials")
+    }
+ const match = await comparePassword(password,user.password);
+ if(!match){
+  res.code =401;
+  throw new Error("INvalid CRedentials");
+ }
+
+ res.status(200).json({code : 200, status : OK , message :"User signin successful"})
+
+  }catch(error){
+    next(error);
+  }
+}
+module.exports = { signup, signin };

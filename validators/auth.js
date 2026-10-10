@@ -16,4 +16,15 @@ const signupValidator = [
     .withMessage("the password field cant be empty"),
 ];
 
-module.exports ={signupValidator};
+const signinValidator = [
+  check("email")
+    .isEmail()
+    .withMessage("INvalid email")
+    .notEmpty()
+    .withMessage("The email field should not be empty"),
+  check("password")
+    .notEmpty()
+    .withMessage("The password field must not be empty"),
+];
+
+module.exports = { signupValidator, signinValidator };
