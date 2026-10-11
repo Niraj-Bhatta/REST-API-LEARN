@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const User = require("../models");
 const hashPassword = require("../utils/hashPass");
-const comparePass = require("../utils/comparePass")
+const {comparePassword} = require("../utils/comparePass");
+const generateToken = require("../utils/generateToken");
 
 const signup = async (req, res, next) => {
   try {
@@ -12,8 +13,8 @@ const signup = async (req, res, next) => {
 
     const { name, email, password, role } = req.body;
 
-    const isEmailExist =await User.findOne({email});
-    if(isEmailExist){
+    const isEmailExist = await User.findOne({ email });
+    if (isEmailExist) {
       res.code = 400;
       throw new Error("Email already exists");
     }
@@ -23,11 +24,9 @@ const signup = async (req, res, next) => {
     const newUser = new User({
       name,
       email,
-      password : hashedPassword,
+      password: hashedPassword,
       role,
     });
-
-    
 
     console.log("NEW USER:", newUser);
 
@@ -58,25 +57,33 @@ const signup = async (req, res, next) => {
   }
 };
 
-const signin = async(req,res,next) =>{
-  try{
-    const {email,password} = req.body;
-    const user = await User.findOne({email});
+const signin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
-    if(!user){
+    if (!user) {
       res.code = 401;
-      throw new Error("Invalid credentials")
+      throw new Error("Invalid credentials");
     }
- const match = await comparePassword(password,user.password);
- if(!match){
-  res.code =401;
-  throw new Error("INvalid CRedentials");
- }
+    const match = await comparePassword(password, user.password);
+    if (!match) {
+      res.code = 401;
+      throw new Error("Invalid CRedentials");
+    }
 
- res.status(200).json({code : 200, status : OK , message :"User signin successful"})
+    const token = generateToken(user);
 
-  }catch(error){
+    res
+      .status(200)
+      .json({
+        code: 200,
+        status: "OK",
+        message: "User signin successful",
+        data: { token },
+      });
+  } catch (error) {
     next(error);
   }
-}
+};
 module.exports = { signup, signin };
