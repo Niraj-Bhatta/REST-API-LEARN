@@ -5,6 +5,7 @@ const {
   signupValidator,
   signinValidator,
   emailValidator,
+  verifyUserValidate
 } = require("../validators/auth");
 const { validate } = require("../validators/validate");
 
@@ -17,6 +18,13 @@ router.post(
   emailValidator,
   validate,
   authController.verifyCode,
+);
+
+router.post(
+  "/verify-user",
+  verifyUserValidate,
+  validate,
+  authController.verifyUser,
 );
 
 module.exports = router;
