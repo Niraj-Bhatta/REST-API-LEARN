@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const User = require("../models");
 const hashPassword = require("../utils/hashPass");
-const {comparePassword} = require("../utils/comparePass");
+const { comparePassword } = require("../utils/comparePass");
 const generateToken = require("../utils/generateToken");
+const generateCode = require("../utils/generateCode");
+const sendEmail = require("../utils/sendEmail");
 
 const signup = async (req, res, next) => {
   try {
@@ -74,16 +76,51 @@ const signin = async (req, res, next) => {
 
     const token = generateToken(user);
 
-    res
-      .status(200)
-      .json({
-        code: 200,
-        status: "OK",
-        message: "User signin successful",
-        data: { token },
-      });
+    res.status(200).json({
+      code: 200,
+      status: "OK",
+      message: "User signin successful",
+      data: { token },
+    });
   } catch (error) {
     next(error);
   }
 };
-module.exports = { signup, signin };
+
+const verifyCode = async (req, res, next) => {
+  try {
+    {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        res.code = 404;
+        throw new Error("User not Found");
+      }
+      if (user.isVerified) {
+        res.code = 400;
+        throw new Error("User already verified");
+      }
+
+      const code = generateCode(6);
+      user.verificationCode = code;
+      await user.save();
+
+      await sendEmail({
+        emailTo: req.body.email,
+        subject: "Email verification code",
+        code,
+        content: "verify your account",
+      });
+    }
+    return res.status(200).json({
+      code: 200,
+      success: true,
+      message: "Verification code sent successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { signup, signin, verifyCode };

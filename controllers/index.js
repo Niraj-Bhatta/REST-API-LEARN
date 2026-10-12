@@ -1,8 +1,10 @@
-const {signup, signin} =require("./auth");
-const {notFound} =require("./notFound");
+const { signup, signin, verifyCode } = require("./auth");
+const { notFound } = require("./notFound");
 
 const authController = {
-    signup ,signin
+  signup,
+  signin,
+  verifyCode,
 };
 
-module.exports={authController,notFound};
+module.exports = { authController, notFound };

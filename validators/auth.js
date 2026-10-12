@@ -1,7 +1,6 @@
 //use of express validator for validating inputs
 const { check } = require("express-validator");
 //express-validator provides a method called check \
-
 const signupValidator = [
   check("name").notEmpty().withMessage("Name cannot be empty"),
   check("email")
@@ -27,4 +26,12 @@ const signinValidator = [
     .withMessage("The password field must not be empty"),
 ];
 
-module.exports = { signupValidator, signinValidator };
+const emailValidator = [
+  check("email")
+    .isEmail()
+    .withMessage("Invalid email")
+    .notEmpty()
+    .withMessage("Email is required"),
+];
+
+module.exports = { signupValidator, signinValidator, emailValidator };
