@@ -122,82 +122,80 @@ const verifyCode = async (req, res, next) => {
     next(error);
   }
 };
-const verifyUser =async(req,res,next)=>{
-  try{
-    const {email , code} =req.body;
+const verifyUser = async (req, res, next) => {
+  try {
+    const { email, code } = req.body;
 
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
 
-    if(!user){
-      res.code =404;
+    if (!user) {
+      res.code = 404;
       throw new Error("User not found");
     }
 
-    if(user.verificationCode!== code){
-      res.code =400;
+    if (user.verificationCode !== code) {
+      res.code = 400;
       throw new Error("Invalid code");
     }
-user.isVerified=true;
-user.verificationCode = null;
+    user.isVerified = true;
+    user.verificationCode = null;
 
-await user.save();
+    await user.save();
 
-res.status(200).json({code : 200 , status : true , message :"user verified successfully"});
-
-
-
-  }catch(error){
+    res
+      .status(200)
+      .json({ code: 200, status: true, message: "user verified successfully" });
+  } catch (error) {
     next(error);
   }
-}
+};
 
+const forgotPasswordCode = async (req, res, next) => {
+  try {
+    const { email } = req.body;
 
-const forgotPasswordCode =async (req,res,next)=>{
-  try{
-    const {email} =req.body;
+    const user = await User.findOne({ email });
 
-    const user = await User.findOne({email});
-
-    if(!user){
-      res.code =404;
+    if (!user) {
+      res.code = 404;
       throw new Error("User not found");
-
-
-    
     }
-const code = generateCode();
+    const code = generateCode();
 
-user.forgotPasswordCode = code;
-await user.save();
+    user.forgotPasswordCode = code;
+    await user.save();
 
-await sendEmail({
-  emailTo : user.email,
-  subject:"Forget Password Code",
-  code,
-  content : "change your password"
-
-});
-res.status(200).json({code : 200 ,status : true , message :"Forget password code sent successfully"});
-
-  }catch(error){
+    await sendEmail({
+      emailTo: user.email,
+      subject: "Forget Password Code",
+      code,
+      content: "change your password",
+    });
+    res
+      .status(200)
+      .json({
+        code: 200,
+        status: true,
+        message: "Forget password code sent successfully",
+      });
+  } catch (error) {
     next(error);
   }
-}
+};
 
-const recoverPassword =async(req,res,next)=>{
-  try{
+const recoverPassword = async (req, res, next) => {
+  try {
+    const { email, code, password } = req.body;
 
-    const {email,code,password} =req.body;
+    const user = await User.findOne({ email });
 
-    const user =await User.findOne({email});
-
-    if(!user){
-      res.code =400;
+    if (!user) {
+      res.code = 400;
       throw new Error("User not Found");
     }
 
-    if(user.forgotPasswordCode !=code){
-      res.code =400;
+    if (user.forgotPasswordCode != code) {
+      res.code = 400;
       throw new Error("Invalid Code");
     }
 
@@ -206,21 +204,31 @@ const recoverPassword =async(req,res,next)=>{
     user.forgotPasswordCode = null;
     await user.save();
 
-    res.status(200).json({code : 200, status : true , message : "Password recovered successfully"})
-
-  }catch(error){
+    res
+      .status(200)
+      .json({
+        code: 200,
+        status: true,
+        message: "Password recovered successfully",
+      });
+  } catch (error) {
     next(error);
   }
-}
+};
 
-
-const changePassword =async(req,res,next)=>{
-  try{
-
-
-
-  }catch(error){
+const changePassword = async (req, res, next) => {
+  try {
+    res.json(req.user)
+  } catch (error) {
     next(error);
   }
-}
-module.exports = { signup, signin, verifyCode ,verifyUser,forgotPasswordCode, recoverPassword, changePassword};
+};
+module.exports = {
+  signup,
+  signin,
+  verifyCode,
+  verifyUser,
+  forgotPasswordCode,
+  recoverPassword,
+  changePassword,
+};
