@@ -41,4 +41,6 @@ router.post(
   validate,
   authController.forgotPasswordCode,
 );
+
+router.post("/change-password",validate,authController.changePassword)
 module.exports = router;

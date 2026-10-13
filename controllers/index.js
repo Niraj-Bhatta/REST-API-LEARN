@@ -1,4 +1,4 @@
-const { signup, signin, verifyCode, verifyUser, forgotPasswordCode ,recoverPassword} = require("./auth");
+const { signup, signin, verifyCode, verifyUser, forgotPasswordCode ,recoverPassword,changePassword} = require("./auth");
 const { notFound } = require("./notFound");
 
 const authController = {
@@ -7,7 +7,8 @@ const authController = {
   verifyCode,
   verifyUser,
   forgotPasswordCode,
-  recoverPassword
+  recoverPassword,
+  changePassword
 };
 
 module.exports = { authController, notFound };
