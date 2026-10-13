@@ -102,7 +102,7 @@ const verifyCode = async (req, res, next) => {
         throw new Error("User already verified");
       }
 
-      const code = generateCode(6);
+      const code = generateCode();
       user.verificationCode = code;
       await user.save();
 
@@ -151,4 +151,66 @@ res.status(200).json({code : 200 , status : true , message :"user verified succe
   }
 }
 
-module.exports = { signup, signin, verifyCode ,verifyUser};
+
+const forgotPasswordCode =async (req,res,next)=>{
+  try{
+    const {email} =req.body;
+
+    const user = await User.findOne({email});
+
+    if(!user){
+      res.code =404;
+      throw new Error("User not found");
+
+
+    
+    }
+const code = generateCode();
+
+user.forgotPasswordCode = code;
+await user.save();
+
+await sendEmail({
+  emailTo : user.email,
+  subject:"Forget Password Code",
+  code,
+  content : "change your password"
+
+});
+res.status(200).json({code : 200 ,status : true , message :"Forget password code sent successfully"});
+
+  }catch(error){
+    next(error);
+  }
+}
+
+const recoverPassword =async(req,res,next)=>{
+  try{
+
+    const {email,code,password} =req.body;
+
+    const user =await User.findOne({email});
+
+    if(!user){
+      res.code =400;
+      throw new Error("User not Found");
+    }
+
+    if(user.forgotPasswordCode !=code){
+      res.code =400;
+      throw new Error("Invalid Code");
+    }
+
+    const hashedPassword = await hashPassword(password);
+    user.password = hashedPassword;
+    user.forgotPasswordCode = null;
+    await user.save();
+
+    res.status(200).json({code : 200, status : true , message : "Password recovered successfully"})
+
+  }catch(error){
+    next(error);
+  }
+}
+
+module.exports = { signup, signin, verifyCode ,verifyUser,forgotPasswordCode, recoverPassword};

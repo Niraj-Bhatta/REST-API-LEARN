@@ -1,17 +1,28 @@
-const generateCode = (codeLength) => {
-  const number = String(Math.random()).split(".")[1].split("");
-  const length = number.length;
-  let code = "";
+const crypto = require("crypto");
 
-  if (!codeLength) {
-    codeLength = 4;
+const generateCode = (codeLength = 6) => {
+  try {
+    // Validate code length
+    if (!Number.isInteger(codeLength) || codeLength !== 6) {
+      throw new Error("Verification code length must be exactly 6 digits.");
+    }
+
+    // Generate a secure random integer between 0 and 999999
+    const randomNumber = crypto.randomInt(0, 1000000);
+
+    // Convert to string and ensure exactly 6 digits
+    const verificationCode = randomNumber
+      .toString()
+      .padStart(6, "0");
+
+    return verificationCode;
+  } catch (error) {
+    // Log the error for debugging
+    console.error("Error generating verification code:", error.message);
+
+    // Forward the error to the caller
+    throw new Error("Failed to generate verification code.");
   }
-
-  for (let i = 0; i < codeLength; i++) {
-    code = code + number[length - (i + 1)];
-  }
-
-  return code;
 };
 
 module.exports = generateCode;

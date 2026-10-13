@@ -34,14 +34,34 @@ const emailValidator = [
     .withMessage("Email is required"),
 ];
 
-const verifyUserValidate =[
-   check("email")
+const verifyUserValidate = [
+  check("email")
     .isEmail()
     .withMessage("Invalid email")
     .notEmpty()
     .withMessage("Email is required"),
 
-    check("code").notEmpty().withMessage("Code is required")
-]
+  check("code").notEmpty().withMessage("Code is required"),
+];
 
-module.exports = { signupValidator, signinValidator, emailValidator, verifyUserValidate };
+const recoverPasswordValidator = [
+  check("email")
+    .isEmail()
+    .withMessage("Invalid email")
+    .notEmpty()
+    .withMessage("Email is required"),
+  check("code").notEmpty().withMessage("Code is required"),
+  check("password")
+    .isLength({ min: 6 })
+    .withMessage("The password must be greater than 6 characters")
+    .notEmpty()
+    .withMessage("the password field cant be empty"),
+];
+
+module.exports = {
+  signupValidator,
+  signinValidator,
+  emailValidator,
+  verifyUserValidate,
+  recoverPasswordValidator,
+};

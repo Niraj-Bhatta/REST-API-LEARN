@@ -7,6 +7,8 @@ const userSchema = mongoose.Schema(
     //role1-super admin , role-2 normal admin , role 3 : user
     role: { type: Number, default: 3 },
 
+    forgotPasswordCode: { type: String },
+    new_Password: { type: String },
     verificationCode: String,
     isVerified: { type: Boolean, default: false },
   },
