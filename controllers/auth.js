@@ -248,6 +248,37 @@ await user.save();
   }
 };
 
+const updateProfile = async(req,res,next) =>{
+  try{
+
+console.log("Content-Type:", req.headers["content-type"]);
+console.log("Request body:", req.body);
+
+const {_id} = req.user;
+const {name,email} =req.body;
+
+const user = await User.findById(_id).select("-password -forgotPasswordCode -verificationCode");
+
+if(!user){
+  res.code =404;
+  throw new Error("User not Found");
+}
+
+user.name = name ? name :user.name;
+user.email = email? email : user.email;
+
+if(email){
+  user.isVerified = false;
+}
+
+await user.save();
+res.status(200).json({code : 200 , status: true, message : "Profile update successfully",data :{user}})
+
+
+  }catch(error){
+    next(error);
+  }
+}
 
 module.exports = {
   signup,
@@ -257,4 +288,5 @@ module.exports = {
   forgotPasswordCode,
   recoverPassword,
   changePassword,
+  updateProfile,
 };

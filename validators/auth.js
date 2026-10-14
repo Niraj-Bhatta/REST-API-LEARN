@@ -1,4 +1,5 @@
 //use of express validator for validating inputs
+const validateEmail =require("./validateEmail")
 const { check } = require("express-validator");
 //express-validator provides a method called check \
 const signupValidator = [
@@ -68,6 +69,20 @@ const changePasswordValidator = [
     .withMessage("New password is required"),
 ];
 
+const updateProfileValidator = [
+  check("email")
+  .custom(async(email) =>{
+    if(email){
+const isValidEmail = validateEmail(email);
+
+if(!isValidEmail){
+  throw "Invalid Email";
+}
+
+    }
+  })
+]
+
 module.exports = {
   signupValidator,
   signinValidator,
@@ -75,4 +90,5 @@ module.exports = {
   verifyUserValidate,
   recoverPasswordValidator,
   changePasswordValidator ,
+  updateProfileValidator
 };
