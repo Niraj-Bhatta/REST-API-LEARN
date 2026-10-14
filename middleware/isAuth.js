@@ -4,7 +4,7 @@ const { secret_key } = require("../config/keys");
 const isAuth = async (req, res, next) => {
   try {
     const authorization =
-      req.headers.authorization && req.headers.authorization.split(" ");
+      req.headers.authorization ? req.headers.authorization.split(" ") : [];
     const token = authorization.length > 1 ? authorization[1] : null;
     if (token) {
       const payload = jwt.verify(token, secret_key);
@@ -25,7 +25,6 @@ const isAuth = async (req, res, next) => {
       res.code = 400;
       throw new Error("Token is required");
     }
-    next();
   } catch (error) {
     next(error);
   }
