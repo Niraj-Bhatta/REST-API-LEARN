@@ -1,3 +1,4 @@
 
 const authRoute=require("./auth");
-module.exports={authRoute};
+const categoryRoute =require("./Category")
+module.exports={authRoute,categoryRoute};

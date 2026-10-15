@@ -4,9 +4,10 @@ const dotenv =require("dotenv");
 const morgan =require("morgan");
 dotenv.config();
 const {connectMongodb} =require("./init/mongodb");
-const {authRoute} =require("./routes");
+const {authRoute,categoryRoute} =require("./routes");
 const {errorHandler} =require("./middleware");
 const {notFound} = require("./controllers");
+
 
 //init app
 const app = express();
@@ -27,6 +28,8 @@ app.use("/api/v1/auth",authRoute);
 app.use(express.json());
 
 app.use(errorHandler);
+
+app.use("/api/v1/category",categoryRoute)
 
 //not found route
 app.use(notFound);
