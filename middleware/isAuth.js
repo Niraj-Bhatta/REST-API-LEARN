@@ -1,32 +1,41 @@
+
 const jwt = require("jsonwebtoken");
 const { secret_key } = require("../config/keys");
 
-const isAuth = async (req, res, next) => {
+const isAuth = (req, res, next) => {
   try {
-    const authorization =
-      req.headers.authorization ? req.headers.authorization.split(" ") : [];
-    const token = authorization.length > 1 ? authorization[1] : null;
-    if (token) {
-      const payload = jwt.verify(token, secret_key);
+    const authorization = req.headers.authorization || "";
+    const [scheme, token] = authorization.split(" ");
 
-      if (payload) {
-        req.user = {
-          _id: payload._id,
-          name: payload.name,
-          email: payload.email,
-          role: payload.role,
-        };
-        next();
-      } else {
-        res.code = 401;
-        throw new Error("Unauthorized");
-      }
-    } else {
-      res.code = 400;
-      throw new Error("Token is required");
+    if (scheme !== "Bearer" || !token) {
+      return res.status(401).json({
+        code: 401,
+        status: false,
+        message: "A valid Bearer token is required",
+      });
     }
+
+    const payload = jwt.verify(token, secret_key);
+
+    req.user = {
+      _id: payload._id,
+      name: payload.name,
+      email: payload.email,
+      role: payload.role,
+    };
+
+    return next();
   } catch (error) {
-    next(error);
+    if (error.name === "JsonWebTokenError" ||
+        error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        code: 401,
+        status: false,
+        message: "Invalid or expired token",
+      });
+    }
+
+    return next(error);
   }
 };
 

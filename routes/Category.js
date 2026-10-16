@@ -16,4 +16,6 @@ router.post(
   categoryController.addCategory
 );
 
+router.put("/:id",isAuth,isAdmin)
+
 module.exports = router;

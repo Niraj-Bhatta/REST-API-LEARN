@@ -10,16 +10,22 @@ const addCategory = async (req, res, next) => {
     const isCategoryExist = await Category.findOne({ title });
 
     if (isCategoryExist) {
-      res.code = 400;
-      throw new Error("Category already exists");
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        message: "Category already exists",
+      });
     }
 
     // Check whether the user exists
     const user = await User.findById(_id);
 
     if (!user) {
-      res.code = 404;
-      throw new Error("User not found");
+      return res.status(404).json({
+        code: 404,
+        status: false,
+        message: "User not found",
+      });
     }
 
     // Create a new category
