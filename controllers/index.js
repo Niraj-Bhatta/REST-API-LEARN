@@ -1,6 +1,6 @@
 const { signup, signin, verifyCode, verifyUser, forgotPasswordCode ,recoverPassword,changePassword,updateProfile} = require("./auth");
 const { notFound } = require("./notFound");
-const  {addCategory} = require('./category')
+const  {addCategory,updateCategory} = require('./category')
 const authController = {
   signup,
   signin,
@@ -13,7 +13,7 @@ const authController = {
 };
 
 const categoryController ={
-  addCategory
+  addCategory,updateCategory
 }
 
 module.exports = { authController, notFound ,categoryController};

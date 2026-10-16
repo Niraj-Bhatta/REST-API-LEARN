@@ -1,21 +1,32 @@
 
-const express = require("express");
-const router = express.Router();
+const { Category } = require("../models");
 
-const { categoryController } = require("../controllers");
-const { addCategoryValidator } = require("../validators/category");
-const { validate } = require("../validators/validate");
-const isAuth = require("../middleware/isAuth");
-const isAdmin = require("../middleware/isAdmin")
-router.post(
-  "/",
-  isAuth,
-  isAdmin,
-  addCategoryValidator,
-  validate,
-  categoryController.addCategory
-);
+const updateCategory = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { title, description } = req.body;
 
-router.put("/:id",isAuth,isAdmin)
+    const category = await Category.findByIdAndUpdate(
+      id,
+      { title, description },
+      { new: true, runValidators: true }
+    );
 
-module.exports = router;
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Category updated successfully",
+      data: category,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { updateCategory };

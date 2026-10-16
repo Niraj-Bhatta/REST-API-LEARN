@@ -47,4 +47,38 @@ const addCategory = async (req, res, next) => {
   }
 };
 
-module.exports = { addCategory };
+
+const updateCategory =async(req,res,next)=>{
+  try{
+const {id}=req.params;
+const {_id} = req.user;
+const {title,desc} =req.body;
+
+
+const category = await Category.findById(id);
+if(!category){
+    res.code =401;
+    throw new Error("Category not found");
+
+
+
+}
+const isCategoryExist = await category.findOne({title});
+if(isCategoryExist && isCategoryExist.title === title && String(isCategoryExist._id) != String(category._id)){
+    res.code =400;
+    throw new Error("Title already exists")
+}
+category.title = title? title:category.title;
+category.description = description;
+category.updatedBy=_id;
+
+await category.save();
+
+
+res.status(200).json({code : 200, status: true,message : "Updation successful"})
+  }catch(error){
+    next(error)
+  }
+}
+
+module.exports = { addCategory,updateCategory };
