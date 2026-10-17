@@ -98,4 +98,31 @@ res.status(200).json({code : 200 , status : true , message :" Category deleted s
   }
 }
 
-module.exports = { addCategory,updateCategory,deleteCategory };
+
+const getCategories = async (req, res, next) => {
+  try {
+    const { q } = req.query;
+
+    let query = {};
+
+    if (q) {
+      const search = new RegExp(q, "i");
+      query = {
+        $or: [{ title: search }]
+      };
+    }
+
+    const categories = await Category.find(query);
+
+    res.status(200).json({
+      code: 200,
+      status: true,
+      message: "Categories found successfully",
+      data: { categories }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { addCategory,updateCategory,deleteCategory,getCategories };
