@@ -1,5 +1,6 @@
 
-const { check } = require("express-validator");
+const { check, param } = require("express-validator");
+const mongoose = require("mongoose");
 
 const addCategoryValidator = [
   check("title")
@@ -7,4 +8,12 @@ const addCategoryValidator = [
     .withMessage("Title is required"),
 ];
 
-module.exports = { addCategoryValidator };
+const idValidator = [
+  param("id").custom(async (id) => {
+    if (id && !mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid category");
+    }
+  }),
+];
+
+module.exports = { addCategoryValidator, idValidator };

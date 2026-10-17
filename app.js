@@ -27,12 +27,12 @@ app.use(morgan("dev"));
 app.use("/api/v1/auth",authRoute);
 app.use(express.json());
 
-app.use(errorHandler);
+
 
 app.use("/api/v1/category",categoryRoute)
 
 //not found route
 app.use(notFound);
 
-
+app.use(errorHandler);
 module.exports =app;
