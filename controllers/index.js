@@ -16,4 +16,6 @@ const categoryController ={
   addCategory,updateCategory,deleteCategory ,getCategories,getCategory
 }
 
-module.exports = { authController, notFound ,categoryController};
+const fileController = require("./file");
+
+module.exports = { authController, notFound ,categoryController,fileController};
