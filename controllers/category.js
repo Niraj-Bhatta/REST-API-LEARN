@@ -132,4 +132,23 @@ const getCategories = async (req, res, next) => {
   }
 };
 
-module.exports = { addCategory, updateCategory, deleteCategory, getCategories };
+
+const getCategory =async(req,res,next) =>{
+  try{
+
+    const {id} =req.params;
+
+const category = await Category.findById(id);
+
+if(!category){
+  res.code=404;
+  throw new Error("Category not found")
+}
+res.status(200).json({code:200, status: true, message:"Category fetchced successfully",data :{category}})
+  }catch(error){
+    next(error);
+  }
+}
+
+
+module.exports = { addCategory, updateCategory, deleteCategory, getCategories, getCategory };
