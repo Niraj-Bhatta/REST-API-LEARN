@@ -14,7 +14,7 @@ console.log("uploadFile:", typeof fileController?.uploadFile);
 router.post(
     "/upload",
     isAuth,
-    upload.single("file"),
+    upload.array("file",3),
     fileController.uploadFile
 );
 
