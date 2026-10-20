@@ -4,11 +4,8 @@ const router = express.Router();
 
 const { fileController } = require("../controllers");
 const isAuth = require("../middleware/isAuth");
-const multer = require("multer");
+const upload = require("../middleware/upload")
 
-const upload = multer({
-    dest: "./upload"
-});
 
 console.log("isAuth:", typeof isAuth);
 console.log("fileController:", typeof fileController);
