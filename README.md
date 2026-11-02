@@ -1,4 +1,2 @@
-rest api is fun to learn
+# REST API Development – Node.js & Express.js
 
-day 18:
-category refactoring, add category,search and delete categories
