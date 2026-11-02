@@ -38,3 +38,35 @@ The goal is to understand RESTful architecture, backend development principles, 
 - CRUD operations
 - Data validation
 - Database integration
+
+### 4. Authentication & Authorization
+- User registration and login
+- Password handling
+- JWT-based authentication
+- Protected routes
+- Token verification and expiration
+- Forgot password functionality
+- Nodemailer integration
+
+### 5. Additional Backend Concepts
+- Environment variables
+- File uploads using Multer
+- API testing with Postman
+- RESTful API structure
+- Backend application organization
+
+## Authentication Implementation
+
+Explored JWT-based authentication using:
+
+- HS256 algorithm
+- 15-minute token expiration
+- Authentication middleware
+- Protected API routes
+
+## Installation & Setup
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/Niraj-Bhatta/REST-API_blog.git
