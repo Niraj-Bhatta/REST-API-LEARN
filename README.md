@@ -14,3 +14,27 @@ The goal is to understand RESTful architecture, backend development principles, 
 - Postman
 - JavaScript
 
+## Concepts Learned
+
+### 1. REST API Fundamentals
+- Understanding REST architecture
+- HTTP methods (GET, POST, PUT, PATCH, DELETE)
+- HTTP status codes
+- Request and response handling
+- CRUD operations
+
+### 2. Express.js
+- Setting up an Express server
+- Routing and controllers
+- Middleware implementation
+- Morgan for HTTP request logging
+- Request validation
+- Error handling
+
+### 3. MongoDB & Mongoose
+- Connecting Node.js with MongoDB
+- MongoDB Atlas
+- Creating schemas and models
+- CRUD operations
+- Data validation
+- Database integration
